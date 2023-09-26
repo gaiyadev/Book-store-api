@@ -5,7 +5,8 @@ using System.Text.Json.Serialization;
 namespace BookstoreAPI.Models;
 
 [Table("roles")]
-public class Role : BaseEntity
+public class 
+    Role : BaseEntity
 {
     [Required]
     [Column("name", TypeName = "VARCHAR(255)")]

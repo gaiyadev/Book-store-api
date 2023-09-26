@@ -60,7 +60,6 @@ public class BookGenreRepository : IBookGenreRepository
         {
             throw new NotFoundException($"Genre with {genreId} not found", HttpStatusCode.NotFound);
         }
-
         return findGenre;
     }
 
@@ -71,7 +70,6 @@ public class BookGenreRepository : IBookGenreRepository
         {
             throw new NotFoundException($"Genre with {genreId} not found", HttpStatusCode.NotFound);
         }
-
         findGenre.Name = createGenreDto.Name;
         await _context.SaveChangesAsync();
         return findGenre;

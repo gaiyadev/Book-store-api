@@ -117,8 +117,6 @@ public class BookGenreController : ControllerBase
         catch (Exception ex)
         {
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
-
         }
-
     }
 }

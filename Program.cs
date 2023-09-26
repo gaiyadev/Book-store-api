@@ -2,7 +2,9 @@ using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
 using BookstoreAPI.Middleware;
 using BookstoreAPI.Repositories.BookGenre;
+using BookstoreAPI.Repositories.Role;
 using BookstoreAPI.Services.BookGenre;
+using BookstoreAPI.Services.role;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +27,10 @@ builder.Services.AddScoped<IBookGenreRepository, BookGenreRepository>();
 
 builder.Services.AddScoped<IBookGenreService, BookGenreService>();
 
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 builder.Services .AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -37,6 +43,8 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateGenreDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateRoleDtoValidator>();
 
 
 var app = builder.Build();
@@ -51,6 +59,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
 app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseAuthorization();
