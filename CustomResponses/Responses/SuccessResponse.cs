@@ -36,4 +36,20 @@ public static class SuccessResponse
             StatusCode = 200
         };
     }
+    public static IActionResult HandleNoContent<T>(string message, T? data)
+    {
+        var apiResponse = new ApiResponse<T?>
+        {
+            Message = message,
+            StatusCode = 204,
+            Status = "Success",
+            Data =  data
+        };
+
+        return new ObjectResult(apiResponse)
+        {
+            StatusCode = 204
+        };
+    }
+    
 }

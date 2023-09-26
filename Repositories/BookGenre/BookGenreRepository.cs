@@ -8,7 +8,7 @@ namespace BookstoreAPI.Repositories.BookGenre;
 
 public class BookGenreRepository : IBookGenreRepository
 {
-    
+
     private readonly ApplicationDbContext _context;
     private readonly ILogger<BookGenreRepository> _logger;
 
@@ -18,7 +18,7 @@ public class BookGenreRepository : IBookGenreRepository
         _logger = logger;
     }
 
-    public async Task<Models.BookGenre> CreateGenres( CreateGenreDto createGenreDto)
+    public async Task<Models.BookGenre> CreateGenres(CreateGenreDto createGenreDto)
     {
         try
         {
@@ -41,7 +41,8 @@ public class BookGenreRepository : IBookGenreRepository
     {
         try
         {
-          return await _context.BookGenres
+            return await _context.BookGenres
+                .OrderByDescending(genre => genre.Id)
                 .ToListAsync();
         }
         catch (Exception ex)
@@ -63,9 +64,30 @@ public class BookGenreRepository : IBookGenreRepository
         return findGenre;
     }
 
-
-    public Task<Models.BookGenre> DeleteGenres(int id)
+    public async Task<Models.BookGenre> UpdateGenres(CreateGenreDto createGenreDto, int genreId)
     {
-        throw new NotImplementedException();
+        var findGenre = await GetGenre(genreId);
+        if (findGenre == null)
+        {
+            throw new NotFoundException($"Genre with {genreId} not found", HttpStatusCode.NotFound);
+        }
+
+        findGenre.Name = createGenreDto.Name;
+        await _context.SaveChangesAsync();
+        return findGenre;
     }
+
+
+    public async Task<Models.BookGenre> DeleteGenre(int genreId)
+    {
+        var findGenre = await GetGenre(genreId);
+        if (findGenre == null)
+        {
+            throw new NotFoundException($"Genre with {genreId} not found", HttpStatusCode.NotFound);
+        }
+        _context.BookGenres.Remove(findGenre);
+        await _context.SaveChangesAsync();
+        return findGenre;
+    }
+
 }

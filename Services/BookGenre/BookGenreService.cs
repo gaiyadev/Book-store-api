@@ -1,5 +1,6 @@
 ﻿using BookstoreAPI.DTOs;
 using BookstoreAPI.Repositories.BookGenre;
+using Microsoft.VisualBasic;
 
 namespace BookstoreAPI.Services.BookGenre;
 
@@ -27,8 +28,14 @@ public class BookGenreService : IBookGenreService
         return await _bookGenreRepository.GetGenre(genreId);
     }
 
-    public Task<Models.BookGenre> DeleteGenres(int id)
+    public async Task<Models.BookGenre> UpdateGenres(CreateGenreDto createGenreDto, int genreId)
     {
-        throw new NotImplementedException();
+        return await _bookGenreRepository.UpdateGenres(createGenreDto, genreId);
     }
+
+    public async Task<Models.BookGenre> DeleteGenre(int genreId)
+    {
+        return await _bookGenreRepository.DeleteGenre(genreId);
+    }
+    
 }

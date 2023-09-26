@@ -16,7 +16,6 @@ public class BookGenreController : ControllerBase
     public BookGenreController(IBookGenreService bookGenreService)
     {
         _bookGenreService = bookGenreService;
-
     }
 
     [HttpPost]
@@ -72,12 +71,54 @@ public class BookGenreController : ControllerBase
         }
         catch (NotFoundException ex)
         {
-            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
         }
         catch (Exception ex)
         {
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
     }
-    
+
+
+    [HttpPatch("genreId:int")]
+    public async Task<IActionResult> UpdateGenres([FromBody] CreateGenreDto createGenreDto, int genreId)
+    {
+        try
+        {
+            var genre = await _bookGenreService.UpdateGenres(createGenreDto, genreId);
+            var apiResponse = new List<object>
+            {
+                new { id = genre.Id, name = genre.Name }
+            };
+            return SuccessResponse.HandleCreated("Successfully updated", apiResponse);
+            
+        } catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+
+    [HttpDelete("genreId:int")]
+    public async Task<IActionResult> DeleteGenres(int genreId)
+    {
+        try
+        {
+             await _bookGenreService.DeleteGenre(genreId);
+            return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+
+        }
+
+    }
 }

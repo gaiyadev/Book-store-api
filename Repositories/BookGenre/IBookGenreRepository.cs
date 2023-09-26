@@ -10,6 +10,8 @@ public interface IBookGenreRepository
     
     Task<Models.BookGenre> GetGenre(int id);
     
-    Task<Models.BookGenre> DeleteGenres(int id);
+    Task<Models.BookGenre> UpdateGenres( CreateGenreDto createGenreDto, int genreId);
+
+    Task<Models.BookGenre> DeleteGenre(int id);
 
 }
