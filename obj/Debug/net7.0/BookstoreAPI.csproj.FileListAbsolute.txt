@@ -68,3 +68,6 @@ C:\projects\dotnet\BookstoreAPI\BookstoreAPI\obj\Debug\net7.0\BookstoreAPI.genru
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\obj\Debug\net7.0\ref\BookstoreAPI.dll
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\AWSSDK.Core.dll
+C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\AWSSDK.S3.dll
+C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\dotenv.net.dll

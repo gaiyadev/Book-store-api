@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "JTBGO9lsM7bWuTkshQ4nZjpo6wOdLPFgcuJ7IITShNdt9VPX2kvftl/6NV8tae3ixg6JUE1F6lG10CAON66JhA==",
+  "dgSpecHash": "F/TzSgSmAlHNnrSJd/V7WLvcIEkRilL9wq2P+7cxMX4wOM8ZaFyQVk+HvuHzW4Tb030S3Vz7z6YnP+ZboA+J5Q==",
   "success": true,
   "projectFilePath": "C:\\projects\\dotnet\\BookstoreAPI\\BookstoreAPI\\BookstoreAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\DELL\\.nuget\\packages\\awssdk.core\\3.7.202.14\\awssdk.core.3.7.202.14.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\awssdk.s3\\3.7.205\\awssdk.s3.3.7.205.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\dotenv.net\\3.1.2\\dotenv.net.3.1.2.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\equadrat.framework.core.interfaces\\6.2.0\\equadrat.framework.core.interfaces.6.2.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\equadrat.framework.core.microsoft.extensions.aspnetcore.mvc\\6.2.0\\equadrat.framework.core.microsoft.extensions.aspnetcore.mvc.6.2.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\equadrat.framework.core.microsoft.extensions.aspnetcore.openapi\\6.2.0\\equadrat.framework.core.microsoft.extensions.aspnetcore.openapi.6.2.0.nupkg.sha512",

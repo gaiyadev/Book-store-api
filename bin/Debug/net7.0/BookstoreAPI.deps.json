@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "BookstoreAPI/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "3.7.205",
           "BCrypt.Net-Next": "4.0.3",
           "FluentAssertions": "6.12.0",
           "FluentValidation": "11.7.1",
@@ -22,10 +23,30 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11",
           "Swashbuckle.AspNetCore": "6.5.0",
           "System.IdentityModel.Tokens.Jwt": "7.0.0",
+          "dotenv.net": "3.1.2",
           "equadrat.Framework.Core.Microsoft.Extensions.AspNetCore.OpenApi": "6.2.0"
         },
         "runtime": {
           "BookstoreAPI.dll": {}
+        }
+      },
+      "AWSSDK.Core/3.7.202.14": {
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.202.14"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.205": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.202.14"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.205.0"
+          }
         }
       },
       "BCrypt.Net-Next/4.0.3": {
@@ -41,6 +62,14 @@
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.2.1.47552"
+          }
+        }
+      },
+      "dotenv.net/3.1.2": {
+        "runtime": {
+          "lib/netstandard2.1/dotenv.net.dll": {
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.1.2.0"
           }
         }
       },
@@ -672,6 +701,20 @@
       "serviceable": false,
       "sha512": ""
     },
+    "AWSSDK.Core/3.7.202.14": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bo5vFW7rB8ABeY6RMK/kOjCOJOHpGO0sHpRILx3HTpvh3fvuWYnI/aHJMpnU/SCvAidyTgrHJcvAHOVGWwPbCA==",
+      "path": "awssdk.core/3.7.202.14",
+      "hashPath": "awssdk.core.3.7.202.14.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.205": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-05g/7/h+S+xpvfzh9kYB6vsYZpuotfNC5piCLN2tMwh3s9orYrlR8+ZBwGwupHb/zb3hArnj9xF9otGfRwTohA==",
+      "path": "awssdk.s3/3.7.205",
+      "hashPath": "awssdk.s3.3.7.205.nupkg.sha512"
+    },
     "BCrypt.Net-Next/4.0.3": {
       "type": "package",
       "serviceable": true,
@@ -685,6 +728,13 @@
       "sha512": "sha512-A6Zr52zVqJKt18ZBsTnX0qhG0kwIQftVAjLmszmkiR/trSp8H+xj1gUOzk7XHwaKgyREMSV1v9XaKrBUeIOdvQ==",
       "path": "bouncycastle.cryptography/2.2.1",
       "hashPath": "bouncycastle.cryptography.2.2.1.nupkg.sha512"
+    },
+    "dotenv.net/3.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lFm4hGX9JkNtAF36Uz4C3WT7MC6Ys802k0cPvlln8ydmH67GQjnToH+w645tQm1czAjW/V6tPE088lD77sYFGA==",
+      "path": "dotenv.net/3.1.2",
+      "hashPath": "dotenv.net.3.1.2.nupkg.sha512"
     },
     "equadrat.Framework.Core.Interfaces/6.2.0": {
       "type": "package",

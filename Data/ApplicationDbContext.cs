@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 namespace BookstoreAPI.Data;
 public class ApplicationDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) :
-        base(options)
+   private readonly string _databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException();
+   
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        _configuration = configuration;
     }
 
     public required DbSet<User> Users { get; set; }
@@ -20,7 +18,7 @@ public class ApplicationDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseNpgsql(_databaseUrl);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

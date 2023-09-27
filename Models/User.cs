@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BookstoreAPI.Models;
 
@@ -16,11 +17,15 @@ public class User : BaseEntity
     public string Username { get; set; } = string.Empty;
     
     [Required]
+    [JsonIgnore]
     [Column("password", TypeName = "VARCHAR(255)")]
     public string Password { get; set; } = string.Empty;
     
     [Column("reset_token",TypeName = "VARCHAR(255)")]
     public string? ResetToken { get; set; }
+    
+    [Column("otp",TypeName = "VARCHAR(255)")]
+    public string? Otp { get; set; }
     
     [Column("is_active", TypeName = "boolean")]
     [DefaultValue(false)]

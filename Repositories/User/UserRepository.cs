@@ -40,6 +40,7 @@ public class UserRepository : IUserRepository
         {
             string hashedPassword = _passwordService.HashPassword(signupDto.Password);
             string verificationToken = Guid.NewGuid().ToString("N").Substring(0, 8) + DateTime.Now.Ticks.ToString("X");
+            string otp = _passwordService.GenerateOtp();
             var user = new Models.User()
             {
                 Email = signupDto.Email,
@@ -47,6 +48,7 @@ public class UserRepository : IUserRepository
                 Username = signupDto.Username,
                 RoleId = signupDto.RoleId,
                 ResetToken = verificationToken,
+                Otp = otp
             };
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -100,7 +102,8 @@ public class UserRepository : IUserRepository
 
     public async Task<Models.User> VerifyEmail(string token)
     {
-        var findUser = await _context.Users.Where(u => u.ResetToken == token).FirstOrDefaultAsync();
+        var findUser = await _context.Users.Where(u => u.ResetToken == token || u.Otp == token).FirstOrDefaultAsync();
+        
         if (findUser == null)
         {
             throw new NotFoundException("Token invalid or expired", HttpStatusCode.NotFound);
@@ -108,6 +111,7 @@ public class UserRepository : IUserRepository
         try
         {
             findUser.ResetToken = null;
+            findUser.Otp = null;
             findUser.IsActive = true;
             await _context.SaveChangesAsync();
             return findUser;
@@ -181,11 +185,19 @@ public class UserRepository : IUserRepository
         var findUser = await GetUserById(id);
         if (findUser == null)
         {
-            throw new NotFoundException("Not found", HttpStatusCode.NotFound);
+            throw new NotFoundException("User Not found", HttpStatusCode.NotFound);
         }
-        _context.Users.Remove(findUser);
-        await _context.SaveChangesAsync();
-        return findUser;
+        try
+        {
+            _context.Users.Remove(findUser);
+            await _context.SaveChangesAsync();
+            return findUser;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
     }
 
     public async Task<Models.User> GetUserByEmailOrUsername(string loginId)

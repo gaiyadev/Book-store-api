@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AWSSDK.S3" Version="3.7.205" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="dotenv.net" Version="3.1.2" />
         <PackageReference Include="equadrat.Framework.Core.Microsoft.Extensions.AspNetCore.OpenApi" Version="6.2.0" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="FluentValidation" Version="11.7.1" />
@@ -30,6 +32,7 @@
 
 
         
+
 
 
 

@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Text.Json.Serialization;
+using BookstoreAPI.Enums;
+using FluentValidation;
 
 namespace BookstoreAPI.DTOs;
 
@@ -9,6 +11,9 @@ public class SignupDto
     public string Password { get; set; } = string.Empty;
     public string ConfirmPassword { get; set; }
     public int RoleId { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public DeviceType Device { get; set; }
 }
 
 public class SignupDtoValidator : AbstractValidator<SignupDto>
@@ -28,5 +33,10 @@ public class SignupDtoValidator : AbstractValidator<SignupDto>
         
         RuleFor(rule => rule.ConfirmPassword).NotEmpty().WithMessage("ConfirmPassword should not be empty")
             .Equal(p => p.Password).WithMessage("Password mismatch");
+
+        RuleFor(rule => rule.Device)
+            .NotEmpty().WithMessage("Device should not be empty")
+            .IsInEnum().WithMessage("Invalid device type");
+
     }
 }

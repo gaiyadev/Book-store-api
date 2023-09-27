@@ -3,6 +3,7 @@ using System;
 using BookstoreAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230927101437_AddOtpColumns")]
+    partial class AddOtpColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,7 +259,8 @@ namespace BookstoreAPI.Migrations
 
                     b.HasIndex("ResetToken");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -267,8 +271,8 @@ namespace BookstoreAPI.Migrations
             modelBuilder.Entity("BookstoreAPI.Models.User", b =>
                 {
                     b.HasOne("BookstoreAPI.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
+                        .WithOne("User")
+                        .HasForeignKey("BookstoreAPI.Models.User", "RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -277,7 +281,8 @@ namespace BookstoreAPI.Migrations
 
             modelBuilder.Entity("BookstoreAPI.Models.Role", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

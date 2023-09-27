@@ -1,17 +1,21 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.Net;
+using BookstoreAPI.CustomExceptions.Exceptions;
+using MailKit.Net.Smtp;
 using MimeKit;
 
 namespace BookstoreAPI.Services;
 
-public class EmailService
+public sealed class EmailService
 {
-    private readonly IConfiguration _configuration;
     private readonly ILogger<EmailService> _logger;
-    
-    public EmailService(IConfiguration configuration, ILogger<EmailService> logger
+    private readonly string _mailTrapHost = Environment.GetEnvironmentVariable("MAILTRAP_HOST") ?? throw new InvalidOperationException();
+    private readonly string _mailTrapPort = Environment.GetEnvironmentVariable("MAILTRAP_PORT") ?? throw new InvalidOperationException();
+    private readonly string _mailTrapPassword = Environment.GetEnvironmentVariable("MAILTRAP_PASSWORD") ?? throw new InvalidOperationException();
+    private readonly string _mailTrapUsername = Environment.GetEnvironmentVariable("MAILTRAP_USERNAME") ?? throw new InvalidOperationException();
+
+    public EmailService(ILogger<EmailService> logger
     )
     {
-        _configuration = configuration;
         _logger = logger;
     }
     
@@ -39,12 +43,11 @@ public class EmailService
             // Create a new SmtpClient instance.
             using var smtpClient = new SmtpClient();
 
-            // Set the SMTP server and port from the appsettings.json file.
-            await smtpClient.ConnectAsync(_configuration["MailTrap:Host"], int.Parse(_configuration["MailTrap:Port"]!), false);
+            await smtpClient.ConnectAsync(_mailTrapHost, int.Parse(_mailTrapPort), false);
 
             // Get the username and password from the appsettings.json file.
-            string username = _configuration["MailTrap:Username"]!;
-            string password = _configuration["MailTrap:Password"]!;
+            string username = _mailTrapUsername;
+            string password = _mailTrapPassword;
 
             // Authenticate with the SMTP server.
             await  smtpClient.AuthenticateAsync(username, password);
@@ -58,9 +61,7 @@ public class EmailService
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            throw;
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
         }
     }
-
-
 }

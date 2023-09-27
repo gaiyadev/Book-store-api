@@ -10,6 +10,7 @@ using BookstoreAPI.Services.BookGenre;
 using BookstoreAPI.Services.role;
 using BookstoreAPI.Services.User;
 using BookstoreAPI.Templates;
+using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,12 +21,19 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
+
 // Add services to the container.
 
 builder.Services.AddControllers();
 
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException();
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw new InvalidOperationException();
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_SECRET_ISSUER") ?? throw new InvalidOperationException();
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_SECRET_AUDIENCE") ?? throw new InvalidOperationException();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ApplicationDbContext")));
+    options.UseNpgsql(databaseUrl));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -90,13 +98,13 @@ builder.Services.AddAuthentication(options =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience =  builder.Configuration["Jwt:Audience"],
+        ValidIssuer = jwtIssuer,
+        ValidAudience =  jwtAudience,
         ValidateIssuerSigningKey = true,
         ValidateAudience = true,
         ValidateIssuer = true,
         ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
     };
 });
 
@@ -128,6 +136,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateGenreDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateRoleDtoValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<SignupDtoValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordDtoValidator>();
 
 

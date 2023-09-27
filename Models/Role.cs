@@ -13,5 +13,5 @@ public class
     public string Name { get; set; } = string.Empty;
     
     [JsonIgnore]
-    public User User { get; set; }
+    public List<User> Users { get; set; } // One role can have many users
 }

@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     public UserController(
         IUserService userService,
         JwtService jwtService, 
-        EmailService emailService  ,
+        EmailService emailService,
         EmailNotificationTemplate emailNotificationTemplate,
         AuthUserIdExtractor authUserIdExtractor
       )
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
             string verificationLink = $"http://localhost:5178/verify?token={user.ResetToken}";
 
             _emailService.SendEmail(user.Email, "Email Verification",
-                _emailNotificationTemplate.EmailVerificationTemplate(verificationLink));
+                _emailNotificationTemplate.GetEmailTemplate( verificationLink, user.Otp!, signupDto.Device));
 
             // Response
             var apiResponse = new List<object>
@@ -243,6 +243,10 @@ public class UserController : ControllerBase
         catch (NotFoundException ex)
         {
             return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
         catch (Exception ex)
         {

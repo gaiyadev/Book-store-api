@@ -5,26 +5,21 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BookstoreAPI.Services;
 
-public class JwtService
+public sealed class JwtService
 {
-    private readonly string _secret;
-    private readonly IConfiguration _configuration;
-
-    public JwtService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-        _secret = _configuration.GetSection("Jwt")["SecretKey"]!;
-    }
+    private readonly string _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw new InvalidOperationException();
+    private readonly string _jwtIssuer = Environment.GetEnvironmentVariable("JWT_SECRET_ISSUER") ?? throw new InvalidOperationException();
+    private readonly string _jwtAudience = Environment.GetEnvironmentVariable("JWT_SECRET_AUDIENCE") ?? throw new InvalidOperationException();
 
     public string CreateToken(string email, string username, int id, int roleId)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecret));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _configuration.GetSection("Jwt")["Issuer"],
-            audience: _configuration.GetSection("Jwt")["Audience"],
+            issuer: _jwtIssuer,
+            audience: _jwtAudience,
             claims: new[] {
                 new Claim("email", email),
                 new Claim("username", username),

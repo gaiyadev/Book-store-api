@@ -2,7 +2,7 @@
 
 namespace BookstoreAPI.Services;
 
-public class AuthUserIdExtractor
+public sealed class AuthUserIdExtractor
 {
     public int GetUserId(ClaimsPrincipal user)
     {
