@@ -71,3 +71,4 @@ C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\FluentValidation.D
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\AWSSDK.Core.dll
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\AWSSDK.S3.dll
 C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\dotenv.net.dll
+C:\projects\dotnet\BookstoreAPI\BookstoreAPI\bin\Debug\net7.0\AWSSDK.Extensions.NETCore.Setup.dll

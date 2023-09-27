@@ -14,7 +14,7 @@ public class ApplicationDbContext : DbContext
     public required DbSet<User> Users { get; set; }
     public required DbSet<BookGenre> BookGenres { get; set; }
     public required DbSet<Role> Roles { get; set; }
-
+    public required DbSet<Product> Products { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -26,9 +26,16 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<User>().HasIndex(e => e.Email).IsUnique();
         modelBuilder.Entity<User>().HasIndex(e => e.Username).IsUnique();
         modelBuilder.Entity<User>().HasIndex(e => e.ResetToken);
+        
         modelBuilder.Entity<BookGenre>().HasIndex(e => e.Name).IsUnique();
+        
         modelBuilder.Entity<Role>().HasIndex(e => e.Name).IsUnique();
         
+        modelBuilder.Entity<Product>().HasIndex(e => e.ProductSlug).IsUnique();
+        modelBuilder.Entity<Product>().HasIndex(e => e.UserId);
+        modelBuilder.Entity<Product>().HasIndex(e => e.BookGenreId);
+        modelBuilder.Entity<Product>().HasIndex(e => e.Price);
+
         modelBuilder.Entity<BookGenre>().HasData(SeedBookGenre.Genres);
         modelBuilder.Entity<Role>().HasData(SeedRole.Roles);
 

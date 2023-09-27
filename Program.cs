@@ -1,12 +1,15 @@
 using System.Text;
+using Amazon.S3;
 using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
 using BookstoreAPI.Middleware;
 using BookstoreAPI.Repositories.BookGenre;
+using BookstoreAPI.Repositories.Product;
 using BookstoreAPI.Repositories.Role;
 using BookstoreAPI.Repositories.User;
 using BookstoreAPI.Services;
 using BookstoreAPI.Services.BookGenre;
+using BookstoreAPI.Services.Product;
 using BookstoreAPI.Services.role;
 using BookstoreAPI.Services.User;
 using BookstoreAPI.Templates;
@@ -32,8 +35,10 @@ var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw ne
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_SECRET_ISSUER") ?? throw new InvalidOperationException();
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_SECRET_AUDIENCE") ?? throw new InvalidOperationException();
 
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(databaseUrl));
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,6 +70,14 @@ builder.Services.AddSwaggerGen(c =>
         { securityScheme, new string[] { } }
     });
 });
+// var awsOptions = new AWSOptions
+// {
+//     Region = Amazon.RegionEndpoint.USEast1, 
+//     Credentials = new EnvironmentVariablesAWSCredentials(),
+// };
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddScoped<IBookGenreRepository, BookGenreRepository>();
 
@@ -78,6 +91,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddTransient<EmailService>();
 
@@ -88,6 +104,10 @@ builder.Services.AddTransient<PasswordService>();
 builder.Services.AddTransient<JwtService>();
 
 builder.Services.AddTransient<AuthUserIdExtractor>();
+
+builder.Services.AddTransient<SlugGenerator>();
+
+builder.Services.AddTransient<AWSS3Service>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -139,6 +159,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<SignupDtoValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordDtoValidator>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>();
 
 var app = builder.Build();
 

@@ -38,4 +38,7 @@ public class User : BaseEntity
     [Required]
     [Column("role")]
     public Role Role { get; set; }
+    
+    [JsonIgnore]
+    public ICollection<Product> Products { get; set; }
 }

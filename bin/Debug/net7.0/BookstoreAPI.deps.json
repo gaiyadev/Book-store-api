@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "BookstoreAPI/1.0.0": {
         "dependencies": {
+          "AWSSDK.Extensions.NETCore.Setup": "3.7.7",
           "AWSSDK.S3": "3.7.205",
           "BCrypt.Net-Next": "4.0.3",
           "FluentAssertions": "6.12.0",
@@ -35,6 +36,20 @@
           "lib/netcoreapp3.1/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
             "fileVersion": "3.7.202.14"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/3.7.7": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.202.14",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.7.0"
           }
         }
       },
@@ -707,6 +722,13 @@
       "sha512": "sha512-bo5vFW7rB8ABeY6RMK/kOjCOJOHpGO0sHpRILx3HTpvh3fvuWYnI/aHJMpnU/SCvAidyTgrHJcvAHOVGWwPbCA==",
       "path": "awssdk.core/3.7.202.14",
       "hashPath": "awssdk.core.3.7.202.14.nupkg.sha512"
+    },
+    "AWSSDK.Extensions.NETCore.Setup/3.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jz7BRX6pUVJqvULIfdMdG2apcI1loh4kodyM/9ypHdlTers0OlPVshPBpUVA8WsSygIVa5evU8tZk4SdbSRCDg==",
+      "path": "awssdk.extensions.netcore.setup/3.7.7",
+      "hashPath": "awssdk.extensions.netcore.setup.3.7.7.nupkg.sha512"
     },
     "AWSSDK.S3/3.7.205": {
       "type": "package",
