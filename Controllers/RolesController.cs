@@ -94,6 +94,10 @@ public class RolesController : ControllerBase
   {
    return ApplicationExceptionResponse.HandleNotFound(ex.Message);
   }
+  catch (ConflictException ex)
+  {
+   return ApplicationExceptionResponse.HandleConflictException(ex.Message);
+  }
   catch (Exception ex)
   {
    return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);

@@ -30,6 +30,10 @@ public class BookGenreController : ControllerBase
             };
             return SuccessResponse.HandleCreated("Successfully created", apiResponse);
         }
+        catch (ConflictException ex)
+        {
+            return ApplicationExceptionResponse.HandleConflictException(ex.Message);
+        }
         catch (Exception ex)
         {
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
@@ -95,6 +99,10 @@ public class BookGenreController : ControllerBase
         } catch (NotFoundException ex)
         {
             return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (ConflictException ex)
+        {
+            return ApplicationExceptionResponse.HandleConflictException(ex.Message);
         }
         catch (Exception ex)
         {

@@ -87,6 +87,12 @@ public class RoleRepository : IRoleRepository
         {
             throw new NotFoundException($"Genre with {roleId} not found", HttpStatusCode.NotFound);
         }
+
+        if (string.Equals(findRole.Name.ToLower(), createRoleDto.Name.ToLower(), StringComparison.Ordinal))
+        {
+                throw new ConflictException("Role already exists", HttpStatusCode.Conflict);
+        }
+        
         findRole.Name = createRoleDto.Name;
         await _context.SaveChangesAsync();
         return findRole;

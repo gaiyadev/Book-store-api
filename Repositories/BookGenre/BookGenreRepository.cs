@@ -20,6 +20,13 @@ public class BookGenreRepository : IBookGenreRepository
 
     public async Task<Models.BookGenre> CreateGenres(CreateGenreDto createGenreDto)
     {
+        var findGenre = await _context.BookGenres.FirstOrDefaultAsync(genre => genre.Name == createGenreDto.Name);
+
+        if (findGenre != null)
+        {
+            throw new ConflictException("Genre already exists", HttpStatusCode.Conflict);
+        }
+        
         try
         {
             var bookGenre = new Models.BookGenre()
@@ -69,6 +76,11 @@ public class BookGenreRepository : IBookGenreRepository
         if (findGenre == null)
         {
             throw new NotFoundException($"Genre with {genreId} not found", HttpStatusCode.NotFound);
+        }
+
+        if (string.Equals(findGenre.Name.ToLower(), createGenreDto.Name.ToLower(), StringComparison.Ordinal))
+        {
+            throw new ConflictException("Genre already exists", HttpStatusCode.Conflict);
         }
         findGenre.Name = createGenreDto.Name;
         await _context.SaveChangesAsync();
