@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ta++Zcx4fxfbeZg8WgCXVFuDjIcrQ2Ovox03Xlxg/WIVvN3+j75Mi2/d51dIe0BUgqRISyrgXl7e16kNRa4wjA==",
+  "dgSpecHash": "DZ6WpRkCZQOxG7Jve8ROhN4MgtzpqFEz4By2WjofD6e667VEkVPuPm3ACCuumoBqCNjsEDRIhSBYop6+uqysFw==",
   "success": true,
   "projectFilePath": "C:\\projects\\dotnet\\BookstoreAPI\\BookstoreAPI\\BookstoreAPI.csproj",
   "expectedPackageFiles": [
@@ -70,6 +70,7 @@
     "C:\\Users\\DELL\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\npgsql\\7.0.6\\npgsql.7.0.6.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.11\\npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\oneof\\3.0.263\\oneof.3.0.263.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",

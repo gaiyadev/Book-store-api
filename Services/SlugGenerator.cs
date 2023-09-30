@@ -31,7 +31,7 @@ public class SlugGenerator
         string currentDateTime = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
         // Append the random number to the slug
-        string slugWithRandom = $"{normalized}-{randomNumber}-${currentDateTime}";
+        string slugWithRandom = $"{normalized}-{randomNumber}-{currentDateTime}";
         
         return slugWithRandom;
     }

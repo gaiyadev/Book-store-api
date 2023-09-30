@@ -2,6 +2,7 @@
 using BookstoreAPI.CustomExceptions.Exceptions;
 using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
+using BookstoreAPI.Pagination;
 using BookstoreAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +13,10 @@ public class ProductRepository : IProductRepository
     private readonly ApplicationDbContext _context;
     private readonly ILogger<ProductRepository> _logger;
     private readonly SlugGenerator _slugGenerator;
-    private readonly AWSS3Service _awss3Service;
+    private readonly Awss3Service _awss3Service;
 
     public ProductRepository(ApplicationDbContext context,
-        ILogger<ProductRepository> logger, SlugGenerator slugGenerator, AWSS3Service awss3Service)
+        ILogger<ProductRepository> logger, SlugGenerator slugGenerator, Awss3Service awss3Service)
     {
         _context = context;
         _logger = logger;
@@ -61,14 +62,50 @@ public class ProductRepository : IProductRepository
             throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
         }
     }
-
-    public async Task<List<Models.Product>> GetProducts()
+    
+    public async Task<PagedResult<Models.Product>> GetProducts(int page, int itemsPerPage, string search)
     {
         try
         {
-            return await _context.Products
-                .OrderByDescending(product => product.Id)
+            // Base query without search term
+            var query = _context.Products
+                .Include(u => u.BookGenre)
+                .Include(vendor => vendor.User)
+                .ThenInclude(role => role.Role)
+                .OrderByDescending(product => product.Id);
+
+            // Apply search filter if a search term is provided
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = (IOrderedQueryable<Models.Product>)query.Where(product => product.Title.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+
+            var products = await query
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
                 .ToListAsync();
+
+            // Create the pagination metadata
+            var meta = new PaginationMetaData
+            {
+                TotalItems = totalItems,
+                ItemCount = products.Count,
+                ItemsPerPage = itemsPerPage,
+                TotalPages = totalPages,
+                CurrentPage = page
+            };
+            var paginationLinks = new PaginationLinks("http://localhost:5178/api/", page, totalPages, itemsPerPage);
+
+            // Create the paged result
+            return new PagedResult<Models.Product>
+            {
+                Data = products,
+                Meta = meta,
+                Links = paginationLinks
+            };
         }
         catch (Exception ex)
         {
@@ -76,6 +113,7 @@ public class ProductRepository : IProductRepository
             throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
         }
     }
+
 
     public async Task<Models.Product> GetProduct(int productId)
     {

@@ -5,16 +5,19 @@ using BookstoreAPI.CustomExceptions.Exceptions;
 
 namespace BookstoreAPI.Services;
 
-public sealed class AWSS3Service
+public sealed class Awss3Service
 {
-    private readonly IAmazonS3 _s3Client;
-    private readonly ILogger<AWSS3Service> _logger;
+    private readonly AmazonS3Client _s3Client;
+    private readonly ILogger<Awss3Service> _logger;
     private readonly string  _awsBucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME") ?? throw new InvalidOperationException();
+    private readonly string _awsSecretAccessKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? throw new InvalidOperationException();
+    private readonly string _awsAccessKeyId = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? throw new InvalidOperationException();
 
-    public AWSS3Service(IAmazonS3 s3Client,  ILogger<AWSS3Service> logger )
+    public Awss3Service(ILogger<Awss3Service> logger )
     {
-        _s3Client = s3Client;
         _logger = logger;
+        _s3Client = new AmazonS3Client(_awsAccessKeyId, _awsSecretAccessKey, Amazon.RegionEndpoint.USEast1);
+
     }
 
     public async Task<string> UploadFileAsync(Stream fileStream, string folderPath, string fileName)
@@ -28,10 +31,16 @@ public sealed class AWSS3Service
 
             return $"https://{_awsBucketName}.s3.amazonaws.com/{key}";
         }
-        catch (Exception ex)
+        catch (AmazonS3Exception ex)
         {
-            _logger.LogError(ex.Message);
+            _logger.LogError($"S3 Error: {ex.Message}", ex);
             throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
         }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Unexpected error: {ex.Message}", ex);
+            throw new InternalServerException("An unexpected error occurred while uploading the file.", HttpStatusCode.InternalServerError);
+        }
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using BookstoreAPI.DTOs;
+using BookstoreAPI.Pagination;
 using BookstoreAPI.Repositories.Product;
 
 namespace BookstoreAPI.Services.Product;
@@ -17,9 +18,9 @@ public class ProductService : IProductService
         return await _productRepository.CreateProduct(createProductDto, userId);
     }
 
-    public async Task<List<Models.Product>> GetProducts()
+    public async Task<PagedResult<Models.Product>> GetProducts(int page, int itemsPerPage, string search)
     {
-        return await _productRepository.GetProducts();
+        return await _productRepository.GetProducts(page, itemsPerPage, search);
     }
 
     public async Task<Models.Product> GetProduct(int productId)

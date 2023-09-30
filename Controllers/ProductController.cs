@@ -50,11 +50,13 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetProducts()
+    public async Task<IActionResult> GetProducts([FromQuery] string search = "", int page = 1, int itemsPerPage=10)
     {
         try
         {
-            var products = await _productService.GetProducts();
+            itemsPerPage = itemsPerPage > 100 ? 100 : itemsPerPage;
+
+            var products = await _productService.GetProducts(page, itemsPerPage ,search);
             return SuccessResponse.HandleOk("Fetched successfully", products, null);
         }
         catch (Exception ex)

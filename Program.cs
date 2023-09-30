@@ -35,10 +35,8 @@ var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw ne
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_SECRET_ISSUER") ?? throw new InvalidOperationException();
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_SECRET_AUDIENCE") ?? throw new InvalidOperationException();
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(databaseUrl));
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -70,11 +68,7 @@ builder.Services.AddSwaggerGen(c =>
         { securityScheme, new string[] { } }
     });
 });
-// var awsOptions = new AWSOptions
-// {
-//     Region = Amazon.RegionEndpoint.USEast1, 
-//     Credentials = new EnvironmentVariablesAWSCredentials(),
-// };
+
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 
 builder.Services.AddAWSService<IAmazonS3>();
@@ -107,7 +101,7 @@ builder.Services.AddTransient<AuthUserIdExtractor>();
 
 builder.Services.AddTransient<SlugGenerator>();
 
-builder.Services.AddTransient<AWSS3Service>();
+builder.Services.AddTransient<Awss3Service>();
 
 builder.Services.AddAuthentication(options =>
 {
