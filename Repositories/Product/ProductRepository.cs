@@ -137,4 +137,56 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync();
         return findProduct;
     }
+
+    public async Task<PagedResult<Models.Product>> GetVendorProducts(int vendorId, int page, int itemsPerPage, string search)
+    {
+        try
+        {
+            // Base query without search term
+            var query = _context.Products
+                .Where( vendor => vendor.UserId == vendorId)
+                .Include(u => u.BookGenre)
+                .Include(vendor => vendor.User)
+                .ThenInclude(role => role.Role)
+                .OrderByDescending(product => product.Id);
+
+            // Apply search filter if a search term is provided
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = (IOrderedQueryable<Models.Product>)query.Where(product => product.Title.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+
+            var products = await query
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToListAsync();
+
+            // Create the pagination metadata
+            var meta = new PaginationMetaData
+            {
+                TotalItems = totalItems,
+                ItemCount = products.Count,
+                ItemsPerPage = itemsPerPage,
+                TotalPages = totalPages,
+                CurrentPage = page
+            };
+            var paginationLinks = new PaginationLinks("http://localhost:5178/api/", page, totalPages, itemsPerPage);
+
+            // Create the paged result
+            return new PagedResult<Models.Product>
+            {
+                Data = products,
+                Meta = meta,
+                Links = paginationLinks
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
+    }
 }

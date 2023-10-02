@@ -102,4 +102,24 @@ public class ProductController : ControllerBase
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
     }
+    
+    [HttpGet("vendor")]
+    [Authorize]
+    public async Task<IActionResult> GetVendorProducts([FromQuery] string search = "", int page = 1, int itemsPerPage=10)
+    {
+        var user = HttpContext.User;
+        var userId = _authUserIdExtractor.GetUserId(user);
+        try
+        {
+            itemsPerPage = itemsPerPage > 100 ? 100 : itemsPerPage;
+
+            var products = await _productService.GetVendorProducts(userId, page, itemsPerPage,search );
+            return SuccessResponse.HandleOk("Fetched successfully", products, null);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+
 }

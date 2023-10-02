@@ -32,4 +32,9 @@ public class ProductService : IProductService
     {
         return await _productRepository.DeleteProduct(productId);
     }
+
+    public async Task<PagedResult<Models.Product>> GetVendorProducts(int vendorId, int page, int itemsPerPage, string search)
+    {
+        return await _productRepository.GetVendorProducts(vendorId, page, itemsPerPage, search);
+    }
 }
