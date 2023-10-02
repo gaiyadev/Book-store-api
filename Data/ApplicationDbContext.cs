@@ -16,6 +16,9 @@ public class ApplicationDbContext : DbContext
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<Product> Products { get; set; }
     
+    public required DbSet<CartItem> CartItems { get; set; }
+
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_databaseUrl);
@@ -36,8 +39,13 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Product>().HasIndex(e => e.BookGenreId);
         modelBuilder.Entity<Product>().HasIndex(e => e.Price);
 
+        modelBuilder.Entity<CartItem>().HasIndex(e => e.UserId);
+        modelBuilder.Entity<CartItem>().HasIndex(e => e.ProductId);
+
+        
         modelBuilder.Entity<BookGenre>().HasData(SeedBookGenre.Genres);
         modelBuilder.Entity<Role>().HasData(SeedRole.Roles);
+        
 
         base.OnModelCreating(modelBuilder);
     }

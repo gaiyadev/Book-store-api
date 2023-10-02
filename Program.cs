@@ -4,6 +4,7 @@ using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
 using BookstoreAPI.Middleware;
 using BookstoreAPI.Repositories.BookGenre;
+using BookstoreAPI.Repositories.CartItem;
 using BookstoreAPI.Repositories.Product;
 using BookstoreAPI.Repositories.Role;
 using BookstoreAPI.Repositories.User;
@@ -88,6 +89,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+
 
 builder.Services.AddTransient<EmailService>();
 

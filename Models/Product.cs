@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace BookstoreAPI.Models;
 
@@ -29,7 +30,7 @@ public class Product : BaseEntity
     
     [Required]
     [Column("Is_available",  TypeName = "boolean")]
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     public bool IsAvailable { get; set; }
     
     [Column("user_id", TypeName = "int" )]
@@ -41,5 +42,9 @@ public class Product : BaseEntity
     public int BookGenreId { get; set; }
     
     public BookGenre BookGenre { get; set; }
+    
+    [JsonIgnore]
+    public List<CartItem> CartItems { get; set; } 
+
 
 }

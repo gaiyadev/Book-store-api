@@ -41,4 +41,7 @@ public class User : BaseEntity
     
     [JsonIgnore]
     public ICollection<Product> Products { get; set; }
+    
+    [JsonIgnore]
+    public ICollection<CartItem> CartItems { get; set; }
 }
