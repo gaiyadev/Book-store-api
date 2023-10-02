@@ -11,5 +11,7 @@ public interface ICartItemRepository
     Task<Models.CartItem> UpdateCartItemQuantity(int cartItemId, int newQuantity);
 
     Task<Models.CartItem> DeleteCartItem(int cartItemId);
+    
+    Task<List<Models.CartItem>> ClearCart(int userId);
 
 }

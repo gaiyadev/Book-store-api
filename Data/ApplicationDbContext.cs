@@ -15,10 +15,11 @@ public class ApplicationDbContext : DbContext
     public required DbSet<BookGenre> BookGenres { get; set; }
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<Product> Products { get; set; }
-    
     public required DbSet<CartItem> CartItems { get; set; }
 
+    public required DbSet<OrderItem> OrderItems { get; set; }
     
+    public required DbSet<Order> Orders { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_databaseUrl);
@@ -41,6 +42,10 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<CartItem>().HasIndex(e => e.UserId);
         modelBuilder.Entity<CartItem>().HasIndex(e => e.ProductId);
+
+        modelBuilder.Entity<Order>().HasIndex(e => e.UserId);
+
+        modelBuilder.Entity<OrderItem>().HasIndex(e => e.ProductId);
 
         
         modelBuilder.Entity<BookGenre>().HasData(SeedBookGenre.Genres);

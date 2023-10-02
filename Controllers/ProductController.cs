@@ -11,7 +11,6 @@ namespace BookstoreAPI.Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/products")]
 [ApiVersion("1.0")]
-
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;

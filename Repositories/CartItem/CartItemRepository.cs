@@ -76,7 +76,6 @@ public class CartItemRepository : ICartItemRepository
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-
             throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
         }
     }
@@ -113,4 +112,24 @@ public class CartItemRepository : ICartItemRepository
 
         return cartItem;
     }
+
+    public async Task<List<Models.CartItem>> ClearCart(int userId)
+    {
+        try
+        {
+            var cartItems = await _context.CartItems
+                .Where(item => item.UserId == userId)
+                .ToListAsync();
+
+            _context.CartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+            return cartItems;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
+    }
+
 }
