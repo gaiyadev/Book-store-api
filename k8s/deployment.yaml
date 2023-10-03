@@ -10,10 +10,26 @@ spec:
   template:
     metadata:
       labels:
-        app:  book-store
+        app: book-store
     spec:
       containers:
-        - name:  book-store
-          image:  book-store:latest  
+        - name: book-store
+          image: book-store:latest  
           ports:
             - containerPort: 80
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_SECRET
+                  name: app-secret
+            - name: JWT_SECRET_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_SECRET_ISSUER
+                  name: app-secret
+            - name: JWT_SECRET_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_SECRET_AUDIENCE
+                  name: app-secret
