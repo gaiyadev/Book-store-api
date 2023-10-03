@@ -37,6 +37,5 @@ public class SignupDtoValidator : AbstractValidator<SignupDto>
         RuleFor(rule => rule.Device)
             .NotEmpty().WithMessage("Device should not be empty")
             .IsInEnum().WithMessage("Invalid device type");
-
     }
 }

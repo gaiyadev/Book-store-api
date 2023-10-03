@@ -35,7 +35,8 @@ public class Product : BaseEntity
     
     [Column("user_id", TypeName = "int" )]
     public int UserId { get; set; }
-
+    
+    [JsonIgnore]
     public User User { get; set; }
     
     [Column("Book_Genre_id", TypeName = "int" )]

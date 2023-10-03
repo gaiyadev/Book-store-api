@@ -3,6 +3,7 @@ using System;
 using BookstoreAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231003015015_CreateOrderAndOrderItem")]
+    partial class CreateOrderAndOrderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,32 +217,28 @@ namespace BookstoreAPI.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("DeliveryFees")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<double>("DeliveryFees")
+                        .HasColumnType("double precision")
                         .HasColumnName("delivery_fees");
 
-                    b.Property<string>("DeliveryMethod")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("DeliveryMethod")
+                        .HasColumnType("integer")
                         .HasColumnName("delivery_method");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("order_date");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("integer")
                         .HasColumnName("payment_method");
 
-                    b.Property<string>("PaymentStatus")
-                        .HasColumnType("text")
+                    b.Property<int?>("PaymentStatus")
+                        .HasColumnType("integer")
                         .HasColumnName("payment_status");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("integer")
                         .HasColumnName("phone_number");
 
                     b.Property<string>("ShippingAddress")
@@ -247,9 +246,8 @@ namespace BookstoreAPI.Migrations
                         .HasColumnType("VARCHAR(255)")
                         .HasColumnName("shipping_address");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
                         .HasColumnName("order_status");
 
                     b.Property<decimal>("TotalAmount")
@@ -311,11 +309,17 @@ namespace BookstoreAPI.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("order_items");
                 });
@@ -541,9 +545,17 @@ namespace BookstoreAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookstoreAPI.Models.User", "User")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BookstoreAPI.Models.Product", b =>
@@ -599,6 +611,8 @@ namespace BookstoreAPI.Migrations
             modelBuilder.Entity("BookstoreAPI.Models.User", b =>
                 {
                     b.Navigation("CartItems");
+
+                    b.Navigation("OrderItems");
 
                     b.Navigation("Orders");
 

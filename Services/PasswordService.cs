@@ -18,4 +18,13 @@ public sealed class PasswordService
         int otp = random.Next(1000, 9999); // Generate a 4-digit OTP
         return otp.ToString();
     }
+        
+    public string GenerateRandomTrackingId(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Amazon.S3;
 using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
@@ -30,7 +31,9 @@ DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
+builder.Services .AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? throw new InvalidOperationException();
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? throw new InvalidOperationException();
@@ -109,6 +112,8 @@ builder.Services.AddTransient<SlugGenerator>();
 
 builder.Services.AddTransient<Awss3Service>();
 
+builder.Services.AddSingleton<DeliveryCalculator>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -160,6 +165,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<SignupDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordDtoValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<OrderCreateDtoValidator>();
 
 var app = builder.Build();
 

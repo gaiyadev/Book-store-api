@@ -1,7 +1,4 @@
-﻿
-using System.Runtime.Serialization;
-
-namespace BookstoreAPI.Enums;
+﻿namespace BookstoreAPI.Enums;
 
 public enum DeviceType
 {

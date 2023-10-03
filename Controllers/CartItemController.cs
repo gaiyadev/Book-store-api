@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookstoreAPI.Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/CartItems")]
+[Route("api/v{version:apiVersion}/cartItems")]
 [ApiVersion("1.0")]
 public class CartItemController : ControllerBase
 {

@@ -44,6 +44,12 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<CartItem>().HasIndex(e => e.ProductId);
 
         modelBuilder.Entity<Order>().HasIndex(e => e.UserId);
+        modelBuilder.Entity<Order>().HasIndex(e => e.TrackingId);
+        
+        // modelBuilder.Entity<Order>()
+        //     .HasMany(o => o.OrderItems)
+        //     .WithOne(oi => oi.Order)
+        //     .HasForeignKey(oi => oi.OrderId);
 
         modelBuilder.Entity<OrderItem>().HasIndex(e => e.ProductId);
 

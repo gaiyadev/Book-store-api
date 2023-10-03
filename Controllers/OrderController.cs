@@ -22,7 +22,6 @@ public class OrderController : ControllerBase
         _authUserIdExtractor = authUserIdExtractor;
     }
 
-    // POST: api/Order
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto orderCreateDto)
@@ -52,47 +51,82 @@ public class OrderController : ControllerBase
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
     }
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetOrders([FromQuery] string search = "", int page = 1, int itemsPerPage=10)
+    {
+        try
+        {
+            var user = HttpContext.User;
+            var userId = _authUserIdExtractor.GetUserId(user);
+            var orderItem = await _orderRepository.GetOrders(userId, page, itemsPerPage, search);
+            return SuccessResponse.HandleOk("Fetched successfully", orderItem,  null);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
 
-    // GET: api/Order/{orderId}
-    [HttpGet("{orderId}")]
+    [HttpGet("{orderId:int}")]
+    [Authorize]
     public async Task<IActionResult> GetOrder(int orderId)
     {
         try
         {
-            var order = await _orderRepository.GetOrder(orderId);
-            return SuccessResponse.HandleOk("Ordered successfully", order,  null);
+            var orderItem = await _orderRepository.GetOrder(orderId);
+            return SuccessResponse.HandleOk("Ordered successfully", orderItem,  null);
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
         }
         catch (Exception ex)
         {
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
     }
-
-    // PUT: api/Order/{orderId}
-    [HttpPut("{orderId}")]
-    public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderUpdateDto orderUpdateDto)
+    
+    [HttpPatch("{orderId:int}/cancel")]
+    [Authorize]
+    public async Task<IActionResult> CancelOrderItem(int orderId)
     {
         try
         {
-            await _orderRepository.UpdateOrder(orderId, orderUpdateDto);
-            return NoContent();
+            var orderItem = await _orderRepository.CancelOrderItem(orderId);
+            return SuccessResponse.HandleOk("Order cancel successfully", orderItem,  null);
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
         catch (Exception ex)
         {
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
-
         }
     }
-
-    // DELETE: api/Order/{orderId}
-    [HttpDelete("{orderId}")]
-    public async Task<IActionResult> DeleteOrder(int orderId)
+    
+    [HttpDelete("{orderId:int}")]
+    // [Authorize]
+    public async Task<IActionResult> DeleteOrderItem(int orderId)
     {
         try
         {
-
-            await _orderRepository.DeleteOrder(orderId);
+            await _orderRepository.DeleteOrderItem(orderId);
             return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
         catch (Exception ex)
         {
