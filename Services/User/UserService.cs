@@ -50,4 +50,19 @@ public class UserService : IUserService
     {
         return await _userRepository.DeleteUserById(id);
     }
+
+    public async Task<Models.User> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    {
+        return await _userRepository.ForgotPassword(forgotPasswordDto);
+    }
+
+    public async Task<Models.User> ResetPassword(ResetPasswordDto resetPasswordDto, int userId)
+    {
+        return await _userRepository.ResetPassword(resetPasswordDto, userId);
+    }
+
+    public async Task<Models.User> VerifyResetPasswordOtp(VerifyResetPasswordOtp verifyResetPasswordOtp)
+    {
+        return await _userRepository.VerifyResetPasswordOtp(verifyResetPasswordOtp);
+    }
 }

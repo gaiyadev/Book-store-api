@@ -253,4 +253,110 @@ public class UserController : ControllerBase
             return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
         }
     }
+    
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    {
+        try
+        {
+            var user = await _userService.ForgotPassword(forgotPasswordDto);
+
+            _emailService.SendEmail(user.Email, "Reset Password",
+                _emailNotificationTemplate.ForgotPasswordEmailTemplate(user.Otp!));
+                
+            var apiResponse = new List<object>
+            {
+                new { id = user.Id, email = user.Email }
+            };
+            return SuccessResponse.HandleCreated("Successfully sent otp", apiResponse);
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (ForbiddenException ex)
+        {
+            return ApplicationExceptionResponse.HandleForbidden(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+    
+    
+    [HttpPost("verify-reset-password-otp")]
+    public async Task<IActionResult> VerifyResetPasswordOtp([FromBody] VerifyResetPasswordOtp verifyResetPasswordOtp)
+    {
+        try
+        {
+            var user = await _userService.VerifyResetPasswordOtp(verifyResetPasswordOtp);
+         
+            var apiResponse = new List<object>
+            {
+                new { id = user.Id, email = user.Email }
+            };
+            var token = _jwtService.CreateToken(user.Email, user.Username, user.Id, roleId: user.RoleId);
+            return SuccessResponse.HandleOk("Otp verified", apiResponse, token);
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (ForbiddenException ex)
+        {
+            return ApplicationExceptionResponse.HandleForbidden(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+    
+    [HttpPut("reset-password")]
+    [Authorize]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        var findUserId = HttpContext.User;
+        
+        var userId = _authUserIdExtractor.GetUserId(findUserId);
+        
+        try
+        {
+            var user = await _userService.ResetPassword(resetPasswordDto, userId);
+         
+            var apiResponse = new List<object>
+            {
+                new { id = user.Id, email = user.Email }
+            };
+            
+            return SuccessResponse.HandleCreated("Successfully reset password", apiResponse);
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (ForbiddenException ex)
+        {
+            return ApplicationExceptionResponse.HandleForbidden(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+    
+   
 }

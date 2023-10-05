@@ -66,7 +66,6 @@ builder.Services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
-
     c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -145,7 +144,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services .AddApiVersioning(options =>
+builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.AssumeDefaultVersionWhenUnspecified = true;
@@ -167,6 +166,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<ChangePasswordDtoValidator>
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<OrderCreateDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<ForgotPasswordDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordDtoValidator>();
 
 var app = builder.Build();
 

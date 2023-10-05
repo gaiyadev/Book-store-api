@@ -200,6 +200,49 @@ public class UserRepository : IUserRepository
         }
     }
 
+    public async Task<Models.User> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    {
+        var findUser = await GetUserByEmail(forgotPasswordDto.Email);
+        try
+        {
+            findUser.Otp = _passwordService.GenerateOtp();
+            await _context.SaveChangesAsync();
+            return findUser;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
+    }
+
+    public async Task<Models.User> ResetPassword(ResetPasswordDto resetPasswordDto, int userId)
+    {
+       var findUser = await GetUserById(userId);
+       try
+       {
+           findUser.Password = _passwordService.HashPassword(resetPasswordDto.NewPassword);
+           findUser.Otp = null;
+           await _context.SaveChangesAsync();
+           return findUser;
+       }
+       catch (Exception ex)
+       {
+           _logger.LogError(ex.Message);
+           throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+       }
+    }
+
+    public async Task<Models.User> VerifyResetPasswordOtp(VerifyResetPasswordOtp verifyResetPasswordOtp)
+    {
+        var findUser = await _context.Users.Where(user => user.Otp == verifyResetPasswordOtp.OTP).FirstOrDefaultAsync();
+        if (findUser == null)
+        {
+            throw new NotFoundException($"User with {verifyResetPasswordOtp.OTP} not found", HttpStatusCode.NotFound);
+        }
+        return findUser;
+    }
+
     public async Task<Models.User> GetUserByEmailOrUsername(string loginId)
     {
         var getUserByEmailOrUsername =  await _context.Users

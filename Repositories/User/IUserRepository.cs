@@ -21,5 +21,12 @@ public interface IUserRepository
     Task<List<Models.User>> FindAll();
     
     Task<Models.User> DeleteUserById(int id);
+    
+    Task<Models.User> ForgotPassword(ForgotPasswordDto forgotPasswordDto);
+
+    Task<Models.User> ResetPassword(ResetPasswordDto
+        resetPasswordDto, int userId);
+    Task<Models.User> VerifyResetPasswordOtp(VerifyResetPasswordOtp verifyResetPasswordOtp);
+
 
 }

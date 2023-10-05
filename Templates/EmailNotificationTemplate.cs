@@ -6,17 +6,14 @@ namespace BookstoreAPI.Templates
     {
         public string GetEmailTemplate(string verificationLink, string otp, DeviceType deviceType )
         {
-            if (deviceType == DeviceType.Web)
+            switch (deviceType)
             {
-                return GetVerificationEmailTemplate(verificationLink);
-            }
-            else if (deviceType == DeviceType.Mobile)
-            {
-                return GetOtpEmailTemplate(otp);
-            }
-            else
-            {
-                return GetVerificationEmailTemplate(verificationLink);
+                case DeviceType.Web:
+                    return GetVerificationEmailTemplate(verificationLink);
+                case DeviceType.Mobile:
+                    return GetOtpEmailTemplate(otp);
+                default:
+                    return GetVerificationEmailTemplate(verificationLink);
             }
         }
 
@@ -55,6 +52,27 @@ namespace BookstoreAPI.Templates
             </head>
             <body>
                 <h1>OTP Confirmation</h1>
+                <p>Dear user,</p>
+                <p>Your OTP code is: {otp}</p>
+                <p>If you didn't request this OTP, please contact support.</p>
+                <p>Regards,<br>Your Company Name</p>
+            </body>
+            </html>
+            ";
+        }
+        
+        public string ForgotPasswordEmailTemplate(string otp)
+        {
+            return $@"
+            <!DOCTYPE html>
+            <html lang=""en"">
+            <head>
+                <meta charset=""UTF-8"">
+                <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                <title>Forgot Password OTP</title>
+            </head>
+            <body>
+                <h1>Forgot Password OTP</h1>
                 <p>Dear user,</p>
                 <p>Your OTP code is: {otp}</p>
                 <p>If you didn't request this OTP, please contact support.</p>
