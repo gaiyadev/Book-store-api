@@ -62,5 +62,17 @@ jobs:
             docker run -d \
             --restart always \
             --name $(echo $IMAGE_NAME) \
+             -e DATABASE_URL=${{secrets.DATABASE_URL}} \
+             -e JWT_SECRET_KEY=${{secrets.JWT_SECRET_KEY}} \
+             -e JWT_SECRET_AUDIENCE=${{secrets.JWT_SECRET_AUDIENCE}} \
+              -e JWT_SECRET_ISSUER=${{secrets.JWT_SECRET_ISSUER}} \
+              -e AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}} \
+               -e AWS_BUCKET_NAME=${{secrets.AWS_BUCKET_NAME}} \
+              -e AWS_REGION=${{secrets.AWS_REGION}} \
+              -e AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}} \
+              -e MAILTRAP_HOST=${{secrets.MAILTRAP_HOST}} \
+              -e MAILTRAP_PASSWORD=${{secrets.MAILTRAP_PASSWORD}} \
+              -e MAILTRAP_PORT=${{secrets.MAILTRAP_PORT}} \
+              -e MAILTRAP_USERNAME=${{secrets.MAILTRAP_USERNAME}} \
             -p 5218:5218 \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
