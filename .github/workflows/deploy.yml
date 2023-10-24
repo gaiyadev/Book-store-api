@@ -5,12 +5,13 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    
   workflow_dispatch:
     inputs:
       version:
         description: 'Image version'
         required: true
-  env:
+env:
     REGISTRY: "registry.digitalocean.com/book-store-api"
     IMAGE_NAME: "book-store-api"
 
