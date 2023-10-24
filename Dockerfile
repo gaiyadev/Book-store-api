@@ -1,20 +1,15 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-#EXPOSE 5218
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /App
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["Book-store-api/BookstoreAPI.csproj", "Book-store-api/"]
-RUN dotnet restore "BookstoreAPI/BookstoreAPI.csproj"
-COPY . .
-WORKDIR "/src/BookstoreAPI"
-RUN dotnet build "BookstoreAPI.csproj" -c Release -o /app/build
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
 
-FROM build AS publish
-RUN dotnet publish "BookstoreAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BookstoreAPI.dll"]
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /App
+COPY --from=build-env /App/out .
+ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
