@@ -5,7 +5,7 @@ EXPOSE 5218
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["BookstoreAPI/BookstoreAPI.csproj", "BookstoreAPI/"]
+COPY ["Book-store-ap/BookstoreAPI.csproj", "BookstoreAPI/"]
 RUN dotnet restore "BookstoreAPI/BookstoreAPI.csproj"
 COPY . .
 WORKDIR "/src/BookstoreAPI"
