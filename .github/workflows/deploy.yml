@@ -1,5 +1,4 @@
 name: Book Store API
-
 on:
   push:
     branches: [ "main" ]
