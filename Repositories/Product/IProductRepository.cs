@@ -14,5 +14,4 @@ public interface IProductRepository
     Task<Models.Product> DeleteProduct(int productId);
     
     Task<PagedResult<Models.Product>> GetVendorProducts(int vendorId, int page, int itemsPerPage, string search);
-
 }

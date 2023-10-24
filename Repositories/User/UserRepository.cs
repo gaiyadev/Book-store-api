@@ -80,10 +80,10 @@ public class UserRepository : IUserRepository
             throw new ForbiddenException("Invalid username or password.", HttpStatusCode.Forbidden);
         }
 
-        if (user.IsActive == false)
-        {
-            throw new ForbiddenException("Account is not active", HttpStatusCode.Forbidden);
-        }
+        // if (user.IsActive == false)
+        // {
+        //     throw new ForbiddenException("Account is not active", HttpStatusCode.Forbidden);
+        // }
         return user;
     }
 
