@@ -1,7 +1,7 @@
 ﻿# Use the aspnet image as the base image for runtime environment
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 5218  # Expose the port your application will listen on
+#EXPOSE 5218  
 
 # Use the sdk image as the build environment
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
