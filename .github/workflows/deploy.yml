@@ -51,23 +51,16 @@ jobs:
     needs: build_and_push
     steps:
       - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Login to registry
             docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
-            
-            # Stop running container
             docker stop $IMAGE_NAME || true
-            
-            # Remove old container
             docker rm $IMAGE_NAME || true
-            
-            # Run a new container from a new image
             docker run -d \
               --restart always \
               --name $IMAGE_NAME \
