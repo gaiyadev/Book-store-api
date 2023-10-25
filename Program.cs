@@ -27,7 +27,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
+DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: false));
 
 // Add services to the container.
 
