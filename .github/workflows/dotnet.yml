@@ -35,7 +35,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd Book-store-api
+            cd /root/Book-store-api
             git pull origin main
             dotnet restore
             dotnet build --no-restore
