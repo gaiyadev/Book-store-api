@@ -60,7 +60,7 @@ jobs:
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
 #            run: |
-              docker run -d \
+            docker run -d \
               --restart always \
               --name $(echo $IMAGE_NAME) \
               -p 80:80 \
