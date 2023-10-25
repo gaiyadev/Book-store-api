@@ -175,11 +175,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<ResetPasswordDtoValidator>(
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-// if (aspp.Environment.IsDevelopment())
-// {
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-// }
+}
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
