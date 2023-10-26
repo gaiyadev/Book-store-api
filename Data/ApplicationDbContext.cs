@@ -19,6 +19,7 @@ public class ApplicationDbContext : DbContext
 
     public required DbSet<OrderItem> OrderItems { get; set; }
     
+    public required DbSet<Admin> Admins { get; set; }
     public required DbSet<Order> Orders { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -46,6 +47,9 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Order>().HasIndex(e => e.UserId);
         modelBuilder.Entity<Order>().HasIndex(e => e.TrackingId);
         
+        modelBuilder.Entity<Admin>().HasIndex(e => e.Email);
+
+        
         // modelBuilder.Entity<Order>()
         //     .HasMany(o => o.OrderItems)
         //     .WithOne(oi => oi.Order)
@@ -56,7 +60,7 @@ public class ApplicationDbContext : DbContext
         
         modelBuilder.Entity<BookGenre>().HasData(SeedBookGenre.Genres);
         modelBuilder.Entity<Role>().HasData(SeedRole.Roles);
-        
+        modelBuilder.Entity<Admin>().HasData(SeedAdmin.Admin);
 
         base.OnModelCreating(modelBuilder);
     }

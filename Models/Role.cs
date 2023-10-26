@@ -14,4 +14,7 @@ public class
     
     [JsonIgnore]
     public List<User> Users { get; set; } // One role can have many users
+    
+    [JsonIgnore]
+    public List<Admin> Admins { get; set; }
 }

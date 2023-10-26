@@ -112,13 +112,58 @@ public class OrderController : ControllerBase
     }
     
     [HttpDelete("{orderId:int}")]
-    // [Authorize]
+    [Authorize]
     public async Task<IActionResult> DeleteOrderItem(int orderId)
     {
         try
         {
             await _orderRepository.DeleteOrderItem(orderId);
             return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return ApplicationExceptionResponse.HandleNotFound(ex.Message);
+        }
+        catch (InternalServerException ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+    
+    [HttpGet("vendor")]
+    [Authorize]
+    public async Task<IActionResult> FetchVendorOrderItem([FromQuery] string search = "", int page = 1, int itemsPerPage=10)
+    {
+        try
+        {
+            var user = HttpContext.User;
+            var userId = _authUserIdExtractor.GetUserId(user);
+            var orderItems = await _orderRepository.FetchVendorOrderItem(userId, page, itemsPerPage, search);
+            return SuccessResponse.HandleOk("Fetched successfully", orderItems,  null);
+        }
+        catch (Exception ex)
+        {
+            return ApplicationExceptionResponse.HandleInternalServerError(ex.Message);
+        }
+    }
+
+
+    [HttpPatch("{orderId:int}/process")]
+    [Authorize]
+    public async Task<IActionResult> ProcessOrderItem([FromBody] OrderProcessingDto orderProcessingDto ,int orderId)
+    {
+        try
+        {
+          var orderItem=  await _orderRepository.ProcessOrderItem(orderProcessingDto, orderId);
+          var apiResponse = new List<object>
+          {
+              new { id = orderItem.Id, productId = orderItem.UserId , status= orderItem.Status}
+          };
+          return SuccessResponse.HandleCreated("Ordered processed successfully", apiResponse);
         }
         catch (NotFoundException ex)
         {

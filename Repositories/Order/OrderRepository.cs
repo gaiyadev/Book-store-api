@@ -194,4 +194,72 @@ public async Task<Models.Order> CreateOrder(OrderCreateDto orderCreateDto, int u
         await _context.SaveChangesAsync();
         return findOrder;
     }
+
+    public async Task<PagedResult<Models.Order>> FetchVendorOrderItem(int userId, int page, int itemsPerPage, string search)
+    {
+        try
+        {
+            var query = _context.Orders
+                .Include(u => u.OrderItems)
+                .ThenInclude(product => product.Product)
+                .ThenInclude(genre => genre.BookGenre)
+                .Where(product => product.UserId == userId)
+                // .Include(vendor => vendor.User)
+                .OrderByDescending(order => order.Id);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = (IOrderedQueryable<Models.Order>)query.Where(order => order.BillingAddress.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+
+            var products = await query
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToListAsync();
+
+            // Create the pagination metadata
+            var meta = new PaginationMetaData
+            {
+                TotalItems = totalItems,
+                ItemCount = products.Count,
+                ItemsPerPage = itemsPerPage,
+                TotalPages = totalPages,
+                CurrentPage = page
+            };
+            var paginationLinks = new PaginationLinks("http://localhost:5178/api/v1", page, totalPages, itemsPerPage);
+
+            // Create the paged result
+            return new PagedResult<Models.Order>
+            {
+                Data = products,
+                Meta = meta,
+                Links = paginationLinks
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
+    }
+
+    public async Task<Models.Order> ProcessOrderItem(OrderProcessingDto orderProcessingDto, int orderId)
+    {
+        var foundOrder = await GetOrder(orderId);
+        try
+        {
+            foundOrder.Status = orderProcessingDto.Status.ToString();
+            await _context.SaveChangesAsync();
+            return foundOrder;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new InternalServerException(ex.Message, HttpStatusCode.InternalServerError);
+        }
+
+    }
 }

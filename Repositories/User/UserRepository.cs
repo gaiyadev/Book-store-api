@@ -247,6 +247,7 @@ public class UserRepository : IUserRepository
     {
         var getUserByEmailOrUsername =  await _context.Users
             .Where(u => u.Email == loginId || u.Username == loginId)
+            .Include(role=>role.Role)
             .FirstOrDefaultAsync();
         
         if (getUserByEmailOrUsername == null)

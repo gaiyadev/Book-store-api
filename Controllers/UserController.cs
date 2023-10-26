@@ -108,7 +108,7 @@ public class UserController : ControllerBase
           
             var apiResponse = new List<object>
             {
-                new { id = user.Id, email = user.Email }
+                new { id = user.Id, email = user.Email, role = new {id=user.Role.Id, name= user.Role.Name} }
             };
             return SuccessResponse.HandleOk("Successfully login", apiResponse, token);
         }

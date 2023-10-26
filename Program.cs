@@ -4,6 +4,7 @@ using Amazon.S3;
 using BookstoreAPI.Data;
 using BookstoreAPI.DTOs;
 using BookstoreAPI.Middleware;
+using BookstoreAPI.Repositories.Admins;
 using BookstoreAPI.Repositories.BookGenre;
 using BookstoreAPI.Repositories.CartItem;
 using BookstoreAPI.Repositories.Order;
@@ -97,6 +98,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 builder.Services.AddTransient<EmailService>();
 
